@@ -1,0 +1,72 @@
+---
+title: "Ant Tropic Levels from Isotope Analysis (Puerto Rico)"
+author: 
+  - Matthew Gilbert
+  - Sofia Sarak
+  - Lily Rudofksy
+format: pdf
+---
+
+## Background
+
+The Earth & Environmental Sciences (E&ES) Department at Wesleyan University offers a Capstone Project option for students in their final year. In 2025, E&ES seniors traveled to Puerto Rico to collect data for four different projects investigating various environmental themes: FIND. 
+
+The course gives students the opportunity to brainstorm, plan, execute, and present a research project from start to finish, providing guidance and resources along the way. The seminar typically involves a travel component to collect field data, graciously funded by alumn FIND.
+
+# Ants, Plants, and Isotopes: Investigating the Trophic Levels of Guanica Dry Forest
+
+Our project ___
+
+### Guanica
+
+### Isotopes
+
+### Research Questions
+
+## Statistical Analyses
+
+```{r}
+#| message: false
+library(here)
+library(tidyverse)
+library(janitor)
+```
+
+```{r}
+#| message: false
+ants <- read_csv(here("data/ANTSREAL.csv")) %>% 
+  clean_names() %>% 
+  rename(d15n = d15n_permil_vs_air,
+         d13n = d13c_permil_vs_vpdb)
+```
+
+
+## Figures
+
+```{r}
+library(ggplot2)
+```
+
+```{r}
+trail_colors <-  c("La Hoya" = '#03bb38ff', "Ojo de Agua" = '#629dffff', "Ballena" = '#f8766cff')
+```
+
+
+```{r}
+ggplot(ants, aes(x=trail_id, y=d15n, fill=trail_id)) + 
+  geom_boxplot() + 
+  ylim(0,10.5) +  
+  labs(title = " ",
+       x=" ", 
+       y=expression(delta*"15N"),
+       fill = "Trail ID") +
+  scale_fill_manual(values = trail_colors) +
+  theme(panel.background=element_rect(fill='#d77e4850'))
+```
+
+```{r}
+ggplot(ants, aes(x=d13n, y=d15n)) + geom_point() + theme_linedraw() + 
+  labs(y= "delta15N permil", x="delta13C permil", title="Variation Between Ant Individuals (delta15N and delta13C)", subtitle="r^2=0.04, LOBF: y=3.15146-0.1336x") +
+  geom_smooth(method="lm", se=FALSE, color="red")
+```
+
